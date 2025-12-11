@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Props的基本使用</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <div id="app2"></div>
+    <div id="app3"></div>
+    <div id="app4"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+    <script src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+      class Person extends React.Component {
+        // render() {
+        //   return (
+        //     <div>
+        //       <h2>姓名：{this.props.name}</h2>
+        //       <h2>年龄：{this.props.age}</h2>
+        //     </div>
+        //   );
+        // }
+
+        render() {
+          const { name, age, city, job, hobby } = this.props;
+
+          return (
+            <div>
+              <h2>姓名：{name}</h2>
+              <h2>年龄：{age + 1}</h2>
+              <h2>城市：{city}</h2>
+              <h2>工作：{job}</h2>
+              <h2>爱好：{hobby}</h2>
+            </div>
+          );
+        }
+      }
+
+      // 【背景：在React16中已经将PropTypes这个单独从React身上提出来了，形成单独的JS文件。避免React太重！】
+      // 给自定义类组件添加PropTypes属性，用于类型检查
+      Person.propTypes = { // propTypes是React组件的一个静态属性，用于定义组件接收的props的类型和要求
+        name: PropTypes.string.isRequired, // 限制name属性必须是字符串，且必传
+        age: PropTypes.number, // 限制age属性必须是数字
+        job: PropTypes.string, // 限制job属性必须是字符串
+        city: PropTypes.string, // 限制city属性必须是字符串
+        hobby: PropTypes.string, // 限制hobby属性必须是字符串
+        speak: PropTypes.func, // 限制speak属性必须是函数
+      };
+
+      // 给自定义类组件添加defaultProps属性，用于设置默认属性值
+      Person.defaultProps = {
+        age: 18, // 如果没有传递age属性，则默认值为18
+        city: "Shanhghai", // 如果没有传递city属性，则默认值为Shanghai
+        job: "Unemployed", // 如果没有传递job属性，则默认值为Unemployed
+        hobby: "Gaming", // 如果没有传递hobby属性，则默认值为Gaming
+      };
+
+      // 渲染组件到DOM
+      ReactDOM.render(
+        <Person name="Ha Lee Chun" age={18} />,
+        document.getElementById("app"),
+      );
+      ReactDOM.render(
+        <Person name="Marcus" age={30} />,
+        document.getElementById("app2"),
+      );
+
+      // 新的给组件传递props的方式【缺点：如果组件传递的属性很多，这种写法很麻烦，需要改进】
+      ReactDOM.render(
+        <Person name="Lee Chun" age={30} />,
+        document.getElementById("app3"),
+      );
+
+      const customizedProps = {
+        name: "Tony",
+        age: 40,
+        city: "New York",
+        job: "Engineer",
+        hobby: "Reading",
+      };
+
+      const speak = () => {
+        console.log("Hello, I am speaking!");
+      };
+      /* 注意：这里使用了展开运算符，将对象的属性展开作为组件的props传递进去。实际原理是：展开运算符不能直接展开对象，需要用花括号包裹起来，形成一个新的对象字面量。但是这里的一对花括号并不是这种使用目的，而是JSX中要引用JS代码规定的格式。
+      那么问题来了：原生JS中是不允许直接展开对象的，除非加上花括号包裹才行，见之前的“展开运算符”的文章讲解。但是这里的花括号并不是用来包裹对象的，而是JSX语法中引用JS代码的格式要求。***为什么可以实现效果呢***
+      因为React和Babel结合起来做了额外处理才能够使我们这样写，实现将对象的属性作为props传递给组件。但是也仅仅限于在这种使用组件的地方这么写！！！
+      这种写法也叫【批量传递标签属性】
+      */
+      ReactDOM.render(
+        <Person {...customizedProps} speak={speak} />,
+        document.getElementById("app4"),
+      );
+    </script>
+  </body>
+</html>

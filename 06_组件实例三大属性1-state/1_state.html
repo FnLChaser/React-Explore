@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>state</title>
+  </head>
+
+  <body>
+    <div id="test"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Weather extends React.Component {
+        /* 构造器被调用几次？ ===> 1次，React在创建组件实例对象时会调用构造器 */
+        constructor(props) {
+          console.log("构造器被调用");
+          super(props);
+          this.state = {
+            isHot: false,
+            windType: "微风"
+          };
+          // 这里的写法是为了让changeWeather方法中的this指向组件实例对象
+          // this.demo = this.changeWeather.bind(this); // 这个是测试用的，便于理解这样写法的JS原理
+          this.changeWeather = this.changeWeather.bind(this);
+        }
+
+        /* render方法被调用几次？ ===> 初始化渲染时调用1次，setState更新state时调用多次 */
+        render() {
+          return (
+            <h1 id="wea" onClick={this.changeWeather}>
+              今天天气{this.state.isHot ? "炎热" : "凉爽"}，{this.state.windType}
+            </h1>
+          );
+        }
+
+        
+        /* changeWeather方法被调用几次？ ===>state中相关的数据更新几次对应几次 */
+        // changeWeather方法定义后会挂载到原型对象上，供实例对象使用
+        // 由于changeWeather是作为onClick事件的回调，并不是通过Weather实例对象调用的，而是类中定义的方法的直接调用，所以这里的this默认是undefined（严格模式下），所以需要通过bind方法来改变this指向，指向组件实例对象
+        changeWeather() {
+                   
+          // this.state.isHot = !this.state.isHot; // 这种写法是严重错误！！！React类式组件中的state不能直接修改！！！【改完了通过开发者工具也能看到这种修改并不生效，即不被React认可，React会认为数据没有修改！】
+          // 正确的做法是通过setState方法来修改state中的数据，这样React才能识别到数据的变化，从而触发重新渲染。
+          // 注意，这种更新数据是一种合并操作，而不是替换操作，所以只需要传入需要修改的数据即可，其他数据不会受到影响。【例如windType就依然存在不会被覆盖】
+          this.setState({
+            isHot: !this.state.isHot,
+          });
+          console.log(this.state.isHot);
+        }
+      }
+
+      ReactDOM.render(<Weather />, document.getElementById("test"));
+
+      // 这里我们可以用原生JS绑定事件的另外两种方法，但是不推荐！因为React中不要利用document对象来操作~
+      // const wea = document.getElementById("wea")
+      // wea.addEventListener("click", ()=>{console.log("h1 clicked")});
+
+      // const wea = document.getElementById("wea")
+      // wea.onclick = ()=>{console.log("h1 clicked")};
+
+      // 我们使用类似于第三种的方式来绑定事件，但是需要注意以下几点：
+      // 1) React中的事件名称采用驼峰命名法，而不是全部小写。比如onclick在React中应该写成onClick
+      // 2) React对应的方法是通过花括号{}来传递一个函数，而不是一个字符串。而且函数不能使用括号()，否则会立即执行。因为在初始化渲染时候就会触发调用，这样做相当于把函数返回值给了事件处理程序，而不是函数本身。
+    </script>
+  </body>
+</html>

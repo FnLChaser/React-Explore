@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+  <head> </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Count extends React.Component {
+        /* 组件构造器 */
+        constructor(props) {
+          super(props);
+          console.log("Count---constructor");
+          this.state = {
+            count: 1,
+          };
+        }
+
+        demise = () => {
+          console.log("Count---unmountComponentAtNode");
+          //   clearInterval(this.timer) //在这里清除定时器也可以
+          /* 卸载组件 */
+          ReactDOM.unmountComponentAtNode(document.getElementById("app"));
+        };
+
+        /* 组件将被卸载 */
+        componentWillUnmount() {
+          console.log("Count---componentWillUnmount");
+        }
+
+        /* 组件将被挂载 */
+        componentWillMount() {
+          console.log("Count---componentWillMount");
+        }
+
+        /* 组件挂载完成 */
+        componentDidMount() {
+          console.log("Count---componentDidMount");
+        }
+
+        // 组件是否应该被更新 【这个钩子函数是一个‘阀门’，返回结果为布尔值，true则继续往下走更新组件。false则停止更新组件，直至下一次被触发】
+        shouldComponentUpdate() {
+          console.log("Count---shouldComponentUpdate");
+          return true;
+        }
+
+        // 组件将被更新
+        componentWillUpdate() {
+          console.log("Count---componentWillUpdate");
+        }
+
+        // 组件更新完毕
+        componentDidUpdate() {
+          console.log("Count---componentDidUpdate");
+        }
+
+        countNum = () => {
+          const { count } = this.state;
+          this.setState({
+            count: count + 1,
+          });
+        };
+
+        // 强制更新组件
+        force = () => {
+          this.forceUpdate();
+        };
+
+        /* 组件初始化渲染，状态更新之后 */
+        render() {
+          console.log("Count---render");
+          return (
+            <div>
+              <h1>Finally, we reached {this.state.count}</h1>
+              <button onClick={this.countNum}>plsu One</button>
+              <button onClick={this.force}>force Reload</button>
+              <button onClick={this.demise}>demise component</button>
+            </div>
+          );
+        }
+      }
+
+      /* 
+        父子组件
+      */
+
+      class ParentComponent extends React.Component {
+        state = {
+          carName: "Benz",
+        };
+
+        switchCar = () => {
+          this.setState({
+            carName: "toyoto",
+          });
+        };
+
+        render() {
+          console.log("ParentComponent---render");
+          return (
+            <div>
+              <h2>我是Parent组件，我目前开：{this.state.carName}</h2>
+              <button onClick={this.switchCar}>换车</button>
+              <ChildComponent carName={this.state.carName} />
+            </div>
+          );
+        }
+      }
+
+      class ChildComponent extends React.Component {
+        state = {
+          carName: "Benz",
+        };
+
+        switchCar = () => {
+          this;
+        };
+
+        /* 这个组件有个坑！！！第一次接受参收时不会触发该钩子调用，后面的传参会触发！ */
+        componentWillReceiveProps(props) {
+          console.log("ChildComponent---componentWillReceiveProps");
+          console.log("ChildComponent---receive:", props);
+        }
+
+        // 组件是否应该被更新 【这个钩子函数是一个‘阀门’，返回结果为布尔值，true则继续往下走更新组件。false则停止更新组件，直至下一次被触发】
+        shouldComponentUpdate() {
+          console.log("ChildComponent---shouldComponentUpdate");
+          return true;
+        }
+
+        // 组件将被更新
+        componentWillUpdate() {
+          console.log("ChildComponent---componentWillUpdate");
+        }
+
+        // 组件更新完毕
+        componentDidUpdate() {
+          console.log("ChildComponent---componentDidUpdate");
+        }
+
+        render() {
+          console.log("ChildComponent---render");
+          const { carName } = this.props;
+          return (
+            <div>
+              <h2>我是Child组件,我负责展示父组件的车辆信息</h2>
+              <p>当前老爹开的是：{carName}</p>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<ParentComponent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3_回调函数形式的ref执行次数的问题</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      /* 回调函数形式的ref在组件重新渲染调用【state更新】时，因为是内联函数的性质，之前的函数会被清掉，新的函数会产生！新的函数在渲染过程中调用初次会被传入null作为参数！
+          切换成class绑定的函数形式即可解决这个问题。虽然这个问题本身也不太影响使用~
+      */
+      class MyComponent extends React.Component {
+
+        state={
+          isHot: true
+        }
+
+        showData = () => {
+          const { node1 } = this;
+          alert("输入框1的值为：" + node1.value);
+        };
+
+        changeWeather = ()=>{
+          this.setState({
+            isHot: !this.state.isHot
+          })
+        }
+
+        render() {
+          const {isHot} = this.state
+          return (
+            <div>
+              <h1>今天天气很{isHot? '炎热':'凉爽'}</h1>
+              <input
+                ref={(c) => {
+                  this.node1 = c;
+                  console.log("@@", c);
+                }}
+                type="text"
+                placeholder="点击按钮提示数据"
+              />
+              <br />
+              <button onClick={this.showData}>点击获取输入框的值</button> &nbsp; <button onClick={this.changeWeather}>切换天气</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<MyComponent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

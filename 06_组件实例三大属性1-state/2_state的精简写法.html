@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>state</title>
+  </head>
+
+  <body>
+    <div id="test"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Weather extends React.Component {
+        // 优化点：
+        // 1）可以使用类字段的写法来定义state，这样就不需要在构造器中初始化state了。
+        constructor(props) {
+          super(props);
+          //   this.state = {
+          //     isHot: false,
+          //     windType: "微风"
+          //   };
+          //   this.changeWeather = this.changeWeather.bind(this);
+        }
+
+        state = {
+          isHot: false,
+          windType: "微风",
+        };
+
+        render() {
+          return (
+            <h1 id="wea" onClick={this.changeWeather}>
+              今天天气{this.state.isHot ? "炎热" : "凉爽"}，
+              {this.state.windType}
+            </h1>
+          );
+        }
+
+        // 这种写法依旧存在this指向丢失问题
+        // changeWeather = function changeWeather() {
+        //   this.setState({ // 这里的this会是undefined
+        //     isHot: !this.state.isHot,
+        //   });
+        // }
+
+        // 所有以后React类式组件中定义的方法都推荐使用【赋值语句 + 箭头函数】的写法。
+        changeWeather = () => {
+          console.log(this); // 这里的this指向组件实例对象
+          this.setState({
+            // 这里的this会是因为箭头函数继承自外层作用域的this，所以指向组件实例对象
+            isHot: !this.state.isHot,
+          });
+        };
+      }
+
+      ReactDOM.render(<Weather />, document.getElementById("test"));
+    </script>
+  </body>
+</html>

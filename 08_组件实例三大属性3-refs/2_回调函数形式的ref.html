@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2_回调函数形式的ref</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      /* 回调函数形式的ref需要以回调函数体现，函数的入参就是ref所在的真实DOM节点。我们取出节点后交由当前组件实例对象，挂载成新的实例对象的属性来使用 */
+      class MyComponent extends React.Component {
+        showData = () => {
+          const { node1 } = this;
+          alert("输入框1的值为：" + node1.value);
+        };
+
+        popUpData = () => {
+          const { node2 } = this;
+          alert("输入框2的值为：" + node2.value);
+        };
+
+        render() {
+          return (
+            <div>
+              <input
+                ref={(c) => (this.node1 = c)}
+                type="text"
+                placeholder="点击按钮提示数据"
+              />
+              <button onClick={this.showData}>点击获取输入框的值</button>
+              <input
+                ref={(c) => (this.node2 = c)}
+                onBlur={this.popUpData}
+                type="text"
+                placeholder="失去焦点提示数据"
+              />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<MyComponent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

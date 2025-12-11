@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>类式组件</title>
+  </head>
+
+  <body>
+
+    <div id="test"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+        class MyComponent extends React.Component {
+            render (){
+                console.log(this); // 类式组件中this指向当前组件实例对象
+                return <h2>类式组件--用于定义复杂类型组件</h2>;
+            }
+        }
+
+
+        ReactDOM.render(<MyComponent/>,document.getElementById("test"));
+
+    </script>
+  </body>
+</html>

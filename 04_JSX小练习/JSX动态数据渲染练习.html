@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JSX动态数据渲染练习</title>
+  </head>
+
+  <body>
+    <!-- 准备容器 -->
+    <div id="test"></div>
+
+    <!-- 先引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 再引入ReactDOM库: 用于支持React操作DOM -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 最后引入Babel库:用于将JSX转换为JS -->
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      const data = ["JavaScript", "React", "Vue", "Angular"];
+
+      const VDOM = (
+        <div>
+          <h1>学习前端框架:</h1>
+          <ul>
+            {data.map((item, idx) => {
+              return <li key={idx}>{item}</li>;
+            })}
+          </ul>
+        </div>
+      );
+      // 渲染到Virtual DOM到真实DOM容器中去
+      ReactDOM.render(VDOM, document.getElementById("test"));
+    </script>
+  </body>
+</html>

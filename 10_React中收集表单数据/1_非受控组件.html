@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1_非受控组件</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Login extends React.Component {
+
+        /* 
+          需要输入类型节点数据的时候，现场从节点里面获取具体数据，这样的组件就叫非受控组件。【现用现取】
+        */
+        login = (event)=>{
+            event.preventDefault(); // 阻止表单默认提交行为
+            alert(`用户名：${this.username.value}，Mana：${this.mana.value}`);
+        }
+
+        render() {
+          return (
+            <form onSubmit={this.login}>
+              <input ref={c => this.username = c} type="text" placeholder="用户名" name="username" /> <br />
+              <input ref={c => this.mana = c} type="mana" placeholder="Mana" name="mana" /> <br />
+              <button >登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Login />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

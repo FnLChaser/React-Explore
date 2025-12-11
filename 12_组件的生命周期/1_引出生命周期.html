@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head> </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Life extends React.Component {
+        state = {
+          opacity: 1,
+        };
+
+        demise = () => {
+          console.log("Prepare to demise...");
+          //   clearInterval(this.timer) //在这里清除定时器也可以
+          /* 卸载组件 */
+          ReactDOM.unmountComponentAtNode(document.getElementById("app"));
+        };
+
+        /* 组件将被卸载 */
+        componentWillUnmount() {
+          clearInterval(this.timer);
+        }
+
+        /* 组件挂载完成 */
+        componentDidMount() {
+          // console.log(this) // 就是当前实例对象
+          this.timer = setInterval(() => {
+            let opacity = this.state.opacity;
+            opacity -= 0.1;
+            if (opacity <= 0) {
+              //这里不用==0是因为JS中的数据精度问题导致结果不一定刚好等于0
+              opacity = 1;
+            }
+            this.setState({
+              opacity, // 这里使用的是对象知识里面：属性名与属性值一样时，可以缩写
+            });
+          }, 200);
+        }
+
+        // changeStart = () => {
+        //   setInterval(() => {
+        //     let opacity = this.state.opacity;
+        //     opacity -= 0.1;
+        //     if (opacity <= 0) { //这里不用==0是因为JS中的数据精度问题导致结果不一定刚好等于0
+        //       opacity = 1;
+        //     }
+        //     this.setState({
+        //       opacity, // 这里使用的是对象知识里面：属性名与属性值一样时，可以缩写
+        //     });
+
+        //   }, 200);
+        // };
+
+        render() {
+          console.log("render...");
+          return (
+            <div>
+              <h1 style={{ opacity: this.state.opacity }}>
+                Finally, we reached the React SLDC
+              </h1>
+              {/*<button onClick={this.changeStart}>start change</button>    该方法会被生命周期挂载完成钩子替代*/}
+              <button onClick={this.demise}>demise component</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Life />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

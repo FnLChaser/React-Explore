@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2_非函数柯里化的实现方式</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+
+
+      class Login extends React.Component {
+
+
+        state= {
+          username: '',
+          mana: ''
+        }
+
+        saveUserProperty = (property, event)=>{
+          this.setState(
+            {[property]: event.target.value} // 属性名从变量中提取，并将其维护到state中
+          );
+
+        }
+
+        login = (event)=>{
+            event.preventDefault(); // 阻止表单默认提交行为
+            const {username, mana} = this.state;
+            alert(`用户名：${username}，Mana：${mana}`);
+        }
+
+        render() {
+          return (
+            <form onSubmit={this.login}>
+              <input onChange={(event)=>{this.saveUserProperty('username',event)}} type="text" placeholder="用户名" name="username" /> <br />
+              <input onChange={(event)=>{this.saveUserProperty('mana',event)}} type="mana" placeholder="Mana" name="mana" /> <br />
+              <button >登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Login />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2_受控组件</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+
+
+      class Login extends React.Component {
+
+        /* 
+          所有的输入类型的节点，其数据这种通过state维护，并在需要的时候从state中获取，这样的组件就叫受控组件
+        */
+        state= {
+          username: '',
+          mana: ''
+        }
+
+        saveUsername = (event)=>{
+            this.setState(
+              {username: event.target.value}
+            );
+        }
+
+        saveMana = (event)=>{
+            this.setState(
+              {mana: event.target.value}
+            );
+        }
+
+        login = (event)=>{
+            event.preventDefault(); // 阻止表单默认提交行为
+            const {username, mana} = this.state;
+            alert(`用户名：${username}，Mana：${mana}`);
+        }
+
+        render() {
+          return (
+            <form onSubmit={this.login}>
+              <input onChange={this.saveUsername} type="text" placeholder="用户名" name="username" /> <br />
+              <input onChange={this.saveMana} type="mana" placeholder="Mana" name="mana" /> <br />
+              <button >登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Login />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

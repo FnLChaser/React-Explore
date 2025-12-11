@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1_高阶函数_函数柯里化</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+
+
+      class Login extends React.Component {
+
+        /*
+
+        高阶函数：如果一个函数符合下面2个规范中的任何一个，那么该函数就叫高阶函数
+            1)函数的参数是一个函数
+            2)函数的返回值是一个函数
+
+            常见的高阶函数： Promise.then()、数组的遍历方法（forEach、map、filter、reduce等），setTimeout、setInterval等。
+          
+        函数的柯里化：通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式。
+
+        */
+        state= {
+          username: '',
+          mana: ''
+        }
+
+        /* 我们需要把saveUsername和saveMana整合到一个函数里面，这种写法太差了 */
+        // saveUsername = (event)=>{
+        //     this.setState(
+        //       {username: event.target.value}
+        //     );
+        // }
+
+        // saveMana = (event)=>{
+        //     this.setState(
+        //       {mana: event.target.value}
+        //     );
+        // }
+
+
+        saveUserProperty = (property)=>{
+            return (event) => { //React执行回调时候会把event对象传递过来
+                this.setState(
+                  {[property]: event.target.value} // 属性名从变量中提取，并将其维护到state中
+                );
+
+            }
+        }
+
+        login = (event)=>{
+            event.preventDefault(); // 阻止表单默认提交行为
+            const {username, mana} = this.state;
+            alert(`用户名：${username}，Mana：${mana}`);
+        }
+
+        render() {
+          return (
+            <form onSubmit={this.login}>
+              <input onChange={this.saveUserProperty('username')} type="text" placeholder="用户名" name="username" /> <br />
+              <input onChange={this.saveUserProperty('mana')} type="mana" placeholder="Mana" name="mana" /> <br />
+              <button >登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Login />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

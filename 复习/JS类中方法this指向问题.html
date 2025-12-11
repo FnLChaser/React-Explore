@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS类中方法this指向问题</title>
+  </head>
+
+  <body>
+    <script>
+      class Person {
+
+        // 构造器中的this指向一定是类的实例对象
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+
+        // 方法 --->会挂载到原型上去
+        sayHello() {
+          console.log(this);
+          // console.log(`Hello, my name is ${this.name}, I'm ${this.age} years old.`);
+        }
+      }
+
+      const p1 = new Person("Alice", 30);
+      p1.sayHello(); // this指向p1对象
+      const greet = p1.sayHello;
+      greet(); // this指向undefined（严格模式下），或者window（非严格模式下）。而又因为greet是类中定义的方法，这种方法直接调用会默认启用局部的严格模式，所以这里的this是undefined。
+
+      // 验证
+      function say() {
+        // "use strict";
+        console.log(this);
+      }
+      say(); // this指向window（非严格模式下）。非类中方法直接调用而没有指定是否严格模式的话，默认是非严格模式，所以这里的this是window对象。
+
+      function say2() {
+        "use strict";
+        console.log(this);
+      }
+      say2(); // this指向undefined（严格模式下）
+
+
+      /* 箭头函数中this指向问题 */
+      // 箭头函数没有自己的this，它的this是继承自外层作用域的this。
+        const obj = {
+            name: "Lijun",
+            age: 25,
+            // 普通函数
+            greet1: function() {
+            console.log(this);
+            },
+            // 箭头函数
+            greet2: () => {
+            console.log(this);
+            }
+        };
+    </script>
+  </body>
+</html>

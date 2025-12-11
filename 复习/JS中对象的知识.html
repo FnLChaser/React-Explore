@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS中对象的知识</title>
+  </head>
+
+  <body>
+    <script>
+      // 对象的属性名如何从变量获取--->用[]包裹变量名
+      const propName = "age";
+      const person = {
+        name: "John",
+        [propName]: 30, // 使用变量作为属性名
+      };
+      console.log(person); 
+    </script>
+  </body>
+</html>

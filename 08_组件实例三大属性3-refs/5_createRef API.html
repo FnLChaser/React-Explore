@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5_createRef API</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      /* 
+        createRef API是React16.3版本中新增的创建ref的一种方式。它通过调用React.createRef()方法来创建一个ref对象，然后将该ref对象赋值给组件实例的属性。
+        在需要引用的元素上使用ref属性将该ref对象传递进去。这样就可以通过ref对象的current属性来访问对应的DOM节点或组件实例。
+        相比于回调函数形式的ref，createRef API更加简洁和易
+      */
+      class MyComponent extends React.Component {
+        /* createRef创建并返回一个容器，该容器存储被ref标识的节点，是"专人专用"的。【一个节点就需要创建一个新容器！】 */
+        myRef = React.createRef();
+        myRef2 = React.createRef();
+
+        state = {
+          isHot: true,
+        };
+
+        showData = () => {
+          alert("输入框1的值为：" + this.myRef.current.value);
+        };
+
+        popUpData = () => {
+          alert("输入框2的值为：" + this.myRef2.current.value);
+        };
+
+        changeWeather = () => {
+          this.setState({
+            isHot: !this.state.isHot,
+          });
+        };
+
+        render() {
+          const { isHot } = this.state;
+          return (
+            <div>
+              <h1>今天天气很{isHot ? "炎热" : "凉爽"}</h1>
+              <input
+                ref={this.myRef}
+                type="text"
+                placeholder="点击按钮提示数据"
+              />
+              <br />
+              <button onClick={this.showData}>点击获取输入框的值</button> &nbsp;
+              <input
+                ref={this.myRef2}
+                onBlur={this.popUpData}
+                type="text"
+                placeholder="失去焦点提示数据"
+              />
+              <button onClick={this.changeWeather}>切换天气</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<MyComponent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

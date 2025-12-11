@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3_props在类组件构造器中的注意点</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+    <script src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+      /* 函数由于可以接收参数从而被React利用来接受组件传参，需要注意的是，因为函数不同于类，内部不能写静态属性这种东西，所以对于传参的要求限制就要仿类组件原始的传参要求写法，定义在函数外部即可 */
+      function Person(props) {
+        console.log("Function props:", props);
+        const { name, age, city, job, hobby } = props;
+        return (
+          <div>
+            <h2>姓名：{name}</h2>
+            <h2>年龄：{age + 1}</h2>
+            <h2>城市：{city}</h2>
+            <h2>工作：{job}</h2>
+            <h2>爱好：{hobby}</h2>
+          </div>
+        );
+      }
+
+      Person.propTypes = {
+        name: PropTypes.string.isRequired, // 限制name属性必须是字符串，且必传
+        age: PropTypes.number, // 限制age属性必须是数字
+        job: PropTypes.string, // 限制job属性必须是字符串
+        city: PropTypes.string, // 限制city属性必须是字符串
+        hobby: PropTypes.string, // 限制hobby属性必须是字符串
+      };
+
+      Person.defaultProps = {
+        age: 18, // 如果没有传递age属性，则默认值为18
+        city: "Shanhghai", // 如果没有传递city属性，则默认值为Shanghai
+        job: "Unemployed", // 如果没有传递job属性，则默认值为Unemployed
+        hobby: "Gaming", // 如果没有传递hobby属性，则默认值为Gaming
+      };
+
+      const customizedProps = {
+        name: "Tony",
+        age: 40,
+        city: "New York",
+        job: "Engineer",
+        hobby: "Reading",
+      };
+
+      ReactDOM.render(
+        <Person {...customizedProps} />,
+        document.getElementById("app"),
+      );
+    </script>
+  </body>
+</html>

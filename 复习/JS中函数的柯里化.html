@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS中函数的柯里化</title>
+  </head>
+
+  <body>
+    <script>
+      function add(x) {
+        return (y) => {
+          return (z) => {
+            return x + y + z;
+          };
+        };
+      }
+
+      console.log(add(1)(2)(3)); // 6
+    </script>
+  </body>
+</html>

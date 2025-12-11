@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>事件处理</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      /* 
+        （1）通过onXxx属性指定事件处理函数（注意大小写，React中对JS原生事件进行了封装，方法名的字母大小写要注意！）
+            a. React使用的是自定义（合成）事件而不是使用的原生的DOM事件===>为了更好的兼容性
+            b．React中的事件是通过事件委托方式处理的（委托给组件最外层的元素）===>为了的高效【事件冒泡原理】
+        （2）通过event.target得到发生事件的DOM元素对象===>不要过度使用ref
+      */
+
+      class MyComponent extends React.Component {
+        showData = () => {
+          const { input1 } = this.refs;
+          console.log("输入框1的值为：", input1.value);
+          alert("输入框1的值为：" + input1.value);
+        };
+
+        popUpData = (event) => {
+          //   console.log("@@",event.target.value)
+          alert("输入框2的值为：" + event.target.value); // todo: 为啥这里打印时改成用","连接就不能输出值了，但是"+"可以？？？
+          /* 逗号在不同上下文含义不同：
+            在函数调用里（例如 alert("文本", event.target.value)），逗号只是把参数分开——alert 只读取第一个参数并显示它，额外的参数会被忽略，所以你看不到 event.target.value。
+            在表达式里，逗号是“逗号运算符”：("文本", event.target.value) 会先求第一个表达式再求第二个，并返回第二个的值（该用法并不是用来拼字符串的，通常也不会这样写在 alert 里） */
+        };
+
+        render() {
+          return (
+            <div>
+              <input ref="input1" type="text" placeholder="点击按钮提示数据" />
+              <button onClick={this.showData}>点击获取输入框的值</button>
+              <input
+                onBlur={this.popUpData}
+                type="text"
+                placeholder="失去焦点提示数据"
+              />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<MyComponent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

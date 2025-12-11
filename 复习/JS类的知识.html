@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS类的知识</title>
+  </head>
+
+  <body>
+    <script>
+      /* 类  Class的基本知识1 */
+      // 1)类的构造器不是一定要写的，如果要初始化属性，则需要自己写构造器
+      // 2)类中定义的方法是挂载到原型对象上去的，供类的实例对象使用
+      // 3)类中方法里面的this指向问题
+      // 4)类的继承，子类可以不写构造器，直接继承父类构造器使用。但是如果有其他属性需要初始化，则需要自己写构造器，并且在构造器中调用super()来调用父类的构造器。且super()必须在使用this之前调用。
+
+      class Person {
+        // 构造器
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+
+        // 方法 --->会挂载到原型上去
+        sayHello() {
+          console.log(this);
+          console.log(
+            `Hello, my name is ${this.name}, I'm ${this.age} years old.`,
+          );
+        }
+      }
+
+      class Student extends Person {
+        // 如果子类没有其他属性需要初始化，可以不写构造器，直接继承父类构造器使用
+        // constructor(name, age) {
+        //     super(name, age);
+        // }
+
+        // 如果子类有其他属性需要初始化，则需要自己写构造器，并且在构造器中调用super()来调用父类的构造器。且super()必须在使用this之前调用。
+        constructor(name, age, grade) {
+          super(name, age); // 调用父类构造器
+          this.grade = grade; // 子类自己的属性
+        }
+
+        // 子类方法
+        study() {
+          console.log(`${this.name} is studying in grade ${this.grade}.`);
+        }
+
+        sayHello() {
+          console.log(
+            `Hi, I'm ${this.name}, a student in grade ${this.grade}.`,
+          );
+        }
+      }
+
+      // 创建实例对象
+      const person1 = new Person("Alice", 30);
+      person1.sayHello.call(person1);
+      // person1.sayHello();
+
+      // 创建子类实例对象
+      const student1 = new Student("Bob", 20, "Sophomore");
+      student1.sayHello();
+
+      /* 类  Class的基本知识2 */
+      // 类中可以直接使用赋值语句来定义属性，这些属性会被定义在实例对象上，而不是原型对象上。这种写法相当于在构造器中使用this来定义属性
+      class Car {
+        // 直接定义属性
+        brand = "Toyota";
+        model = "Corolla";
+        constructor(year) {
+          this.year = year;
+        }
+      }
+
+      const car1 = new Car(2020);
+      console.log(car1); // {brand: 'Toyota', model: 'Corolla', year: 2020}
+
+      /* static 关键字定义了静态方法或字段，或静态初始化块。
+        静态属性不能在类的实例上直接访问。相反，它们是在类本身上被访问的。
+        静态方法通常是实用函数，如创建或克隆对象的函数，而静态属性则适用于缓存、固定配置或其他不需要跨实例复制的数据。 */
+      class Bike {
+        // 直接静态属性
+        static type = "Mountain Bike";
+      }
+
+      console.log(Bike.type); // 访问静态属性，输出: Mountain Bike
+      const bike = new Bike();
+      console.log(bike.type); // 访问实例属性，输出: undefined
+    </script>
+  </body>
+</html>

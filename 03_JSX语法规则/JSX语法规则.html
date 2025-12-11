@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JSX语法规则</title>
+  </head>
+  <style>
+    .title {
+      background-color: bisque;
+      font-size: large;
+    }
+  </style>
+
+  <body>
+    <!-- 准备容器 -->
+    <div id="test"></div>
+
+    <!-- 先引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 再引入ReactDOM库: 用于支持React操作DOM -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 最后引入Babel库:用于将JSX转换为JS -->
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      const myId = "demoId";
+      const content = "JSX Practice Content";
+
+      const VDOM = (
+        <div>
+          <h1 className="title" id={myId.toLocaleLowerCase()}>
+            {content}
+          </h1>
+          <h1
+            style={{ backgroundColor: "red", fontSize: "30px" }}
+            id={myId.toLocaleLowerCase() + "2"}
+          >
+            {content + "2"}
+          </h1>
+          <input type="text" placeholder="请输入内容" />
+          <Good>This is a custom component tag</Good>
+        </div>
+      );
+
+      // React定义虚拟DOM不能使用引号
+      // JSX中使用大括号{}来嵌入JS表达式【注意：是JS表达式而不是JS语句！！！】
+      // JSX中样式类名使用className而不是class
+      // JSX中使用内联样式时，要用style={{key1:value1,key2:value2,...}}，外层大括号表示是JS表达式，内层大括号表示是一个JS对象
+      // JSX中虚拟DOM只能有一个根标签
+      // JSX中标签必须闭合，形如<tagName></tagName>。如果是单标签也需要自闭合。形如 <tagName />
+      // JSX中标签名首字母区分大小写，
+      //      1) 形如<div></div>表示HTML标签，转换时以HTML中同名标签替换。若无对应的同名标签，则报错！报错后以字符串显示内容。不至于页面挂掉
+      //      2) 而形如<Div></Div>表示自定义组件标签。如果组件未定义，则报错！
+
+      // 渲染到Virtual DOM到真实DOM容器中去
+      ReactDOM.render(VDOM, document.getElementById("test"));
+    </script>
+  </body>
+</html>

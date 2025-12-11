@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HELLO_REACT</title>
+  </head>
+
+  <body>
+    <!-- 准备容器 -->
+    <div id="test"></div>
+
+    <!-- 先引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 再引入ReactDOM库: 用于支持React操作DOM -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 最后引入Babel库:用于将JSX转换为JS -->
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // 注意type属性:此处一定要是babel,不写type会默认javascript
+      // 创建React元素,jxs语法,不能写字符串
+      const VDOM = <h1>Hello React!</h1>;
+
+      // 渲染到Virtual DOM到真实DOM容器中去
+      ReactDOM.render(VDOM, document.getElementById("test"));
+    </script>
+  </body>
+</html>
