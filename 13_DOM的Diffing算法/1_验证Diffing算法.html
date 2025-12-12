@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>验证Diffing算法</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Time extends React.Component {
+        state = {
+          date: new Date(),
+        };
+
+        componentDidMount(){
+            setInterval(()=>{
+                this.setState(
+                    {date: new Date()}
+                )
+            },1000)
+        }
+
+        render() {
+            // diffing算法对比的是最小粒度是标签！当然，标签里面套标签当然也会被识别出来，逐层对比，将有变化的部分进行重新渲染
+          return (
+            <div>
+              <h1>Hello</h1>
+              <input type = "text"></input>
+              <span> the time is: {this.state.date.toTimeString()}</span>
+              <input type = "text"></input>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Time/>, document.getElementById('app'));
+    </script>
+  </body>
+</html>
