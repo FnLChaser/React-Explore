@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>2_React生命周期_旧</title>
+    <title>3_React生命周期_新</title>
   </head>
   <body>
     <div id="app"></div>
 
-    <script src="../js/react.development.js"></script>
-    <script src="../js/react-dom.development.js"></script>
-    <script src="../js/babel.min.js"></script>
+    <script src="../js/React17.0.1/react.development.js"></script>
+    <script src="../js/React17.0.1/react-dom.development.js"></script>
+    <script src="../js/React17.0.1/babel.min.js"></script>
 
     <script type="text/babel">
       class Count extends React.Component {
@@ -35,8 +35,29 @@
         }
 
         /* 组件将被挂载 */
-        componentWillMount() {
-          console.log("Count---componentWillMount");
+        // UNSAFE_componentWillMount() {
+        //   console.log("Count---UNSAFE_componentWillMount");
+        // }
+
+        /*
+        
+        新生命周期中，这钩子极其少用。他可以接收传递给组件的props,同时还有组件的state信息，可以用于以下case:
+        当state的数据任何时候都取决于props，那么就可以使用这个钩子了！这个钩子强制返回null或者类似于state的对象
+        如果返回了props(即类似于state的对象)，那么后面的数据就以props为主了，state无法修改！ ===>详情见官方文档@17.0.1
+        如果返回了null,对state无影响。
+        
+        */
+        static getDerivedStateFromProps(props,state){
+          console.log("Count---getDerivedStateFromProps",props,state);
+          return null;
+        }
+
+        /* 
+        此钩子用于在DOM更新前获取快照数据，当然本身也不是很常用
+        */
+        getSnapshotBeforUpdate(){
+          console.log("Count---getSnapshotBeforUpdate");
+          return {preDataKey:"preDataValue"} // 这里的返回值会被传递给组件的钩子函数componentDidUpdate，作为参数传入。其实就是记录DOM更新前的最后以此快照数据，因为更新后之前的数据就没了。
         }
 
         /* 组件挂载完成 */
@@ -51,8 +72,8 @@
         }
 
         // 组件将被更新
-        componentWillUpdate() {
-          console.log("Count---componentWillUpdate");
+        UNSAFE_componentWillUpdate() {
+          console.log("Count---UNSAFE_componentWillUpdate");
         }
 
         // 组件更新完毕
@@ -123,8 +144,8 @@
         };
 
         /* 这个组件有个坑！！！第一次接受参收时不会触发该钩子调用，后面的传参会触发！ */
-        componentWillReceiveProps(props) {
-          console.log("ChildComponent---componentWillReceiveProps");
+        UNSAFE_componentWillReceiveProps(props) {
+          console.log("ChildComponent---UNSAFE_componentWillReceiveProps");
           console.log("ChildComponent---receive:", props);
         }
 
@@ -135,8 +156,8 @@
         }
 
         // 组件将被更新
-        componentWillUpdate() {
-          console.log("ChildComponent---componentWillUpdate");
+        UNSAFE_componentWillUpdate() {
+          console.log("ChildComponent---UNSAFE_componentWillUpdate");
         }
 
         // 组件更新完毕
@@ -156,7 +177,7 @@
         }
       }
 
-      ReactDOM.render(<ParentComponent />, document.getElementById("app"));
+      ReactDOM.render(<Count />, document.getElementById("app"));
     </script>
   </body>
 </html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2_key的作用</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class Person extends React.Component {
+        state = {
+          persons: [
+            { uid: 1, name: "Michael", age: 19 },
+            { uid: 2, name: "Tom", age: 20 },
+            { uid: 3, name: "Alice", age: 20 },
+          ],
+        };
+
+        componentDidMount() {
+          setInterval(() => {
+            this.setState({ date: new Date() });
+          }, 1000);
+        }
+
+        addPerson = () => {
+          const { persons } = this.state;
+          const xw = { uid: persons.length + 1, name: "Wang Xiaojie", age: 30 };
+          this.setState({
+            persons: [xw, ...persons],
+          });
+        };
+
+        render() {
+          // diffing算法对比的是最小粒度是标签！当然，标签里面套标签当然也会被识别出来，逐层对比，将有变化的部分进行重新渲染
+          return (
+            <div>
+              <button onClick={this.addPerson}>点击添加人员</button>
+              <h2>使用index(索引值)作为key渲染</h2>
+              <ul>
+                {this.state.persons.map((person,index) => {
+                  return (
+                    <li key={index}>
+                      {person.name} ---{person.age}---请输入名字以验证您同意协议：<input type="text"></input>
+                    </li>
+                  );
+                })}
+              </ul>
+              <hr/>
+              <h2>使用数据的唯一标识作为key渲染</h2>
+              <ul>
+                {this.state.persons.map((person) => {
+                  return (
+                    <li key={person.uid}>
+                      {person.name} ---{person.age}---请输入名字以验证您同意协议：<input type="text"></input>
+                    </li>
+                  );
+                })}
+              </ul>
+
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Person />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
